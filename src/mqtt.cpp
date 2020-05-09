@@ -21,7 +21,6 @@
  */
 
 #include <WiFi.h> 
-#define MQTT_MAX_PACKET_SIZE 2048
 #include "PubSubClient.h"
 #include "railcorefuse.h"
 
@@ -78,13 +77,10 @@ boolean publishConfig () {
     char topic[MQTT_TOPIC_LENGTH+10];
     sprintf(topic,"%s/%s",mqttTopic,"config");
 
-    char debug[250];
-    strcpy(debug,"This ia a long message I need to make it at least 156 characters long, but that is a long way to go from here yet. 12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
-    return publishMes(topic,debug);
+    return publishMes(topic,payload);
 }
 
 boolean publishTemp(uint8_t temperature) {
-    publishConfig();
     char payload[5];
     itoa(temperature, payload, 10);
 
