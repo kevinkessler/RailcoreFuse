@@ -34,6 +34,7 @@ extern char mqttTopic[MQTT_TOPIC_LENGTH];
 extern uint16_t mqttPort;
 
 const char *configJson = "{\"device_class\":\"temperature\",\"name\": \"RailcoreFuse\",\"state_topic\": \"%s/%s\", \"unit_of_measurement\": \"°C\", \"value_template\": \"{{ value_json.temperature}}\" }";
+const char *stateJson = "{\"temperature\":\"%s\"}";
 
 void mqttCallback(char *topic, byte *payload, uint16_t length) {
     Serial.printf("Message Received on topic %s\n", topic);
@@ -81,8 +82,10 @@ boolean publishConfig () {
 }
 
 boolean publishTemp(uint8_t temperature) {
-    char payload[5];
-    itoa(temperature, payload, 10);
+    char payload[30];
+    char num[5];
+    itoa(temperature, num, 10);
+    sprintf(payload,stateJson,num);
 
     char topic[MQTT_TOPIC_LENGTH + 10];
     sprintf(topic,"%s/%s",mqttTopic,"state");
